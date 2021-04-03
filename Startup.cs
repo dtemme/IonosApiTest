@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace OneAndOne
 {
@@ -12,11 +12,11 @@ namespace OneAndOne
         {
             services
                 .AddMvcCore()
-                .AddJsonFormatters()
+                .AddNewtonsoftJson()
                 .AddApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
         }
 
@@ -29,7 +29,12 @@ namespace OneAndOne
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
                 c.RoutePrefix = string.Empty;
             });
-            app.UseMvc();
+            app.UseHttpMethodOverride(new HttpMethodOverrideOptions() { });
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
