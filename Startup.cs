@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace OneAndOne
+namespace Ionos
 {
     public class Startup
     {

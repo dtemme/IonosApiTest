@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace OneAndOne
+namespace Ionos
 {
     public class Program
     {

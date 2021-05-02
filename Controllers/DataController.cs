@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace OneAndOne.Controllers
+namespace Ionos.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
