@@ -11,7 +11,7 @@ namespace Ionos
         public void ConfigureServices(IServiceCollection services)
         {
 #if !DEBUG
-            System.Net.Http.HttpClient.DefaultProxy = new System.Net.WebProxy("http://winproxy.schlund.de:3128");
+            System.Net.Http.HttpClient.DefaultProxy = new System.Net.WebProxy("http://winproxy.server.lan:3128");
 #endif
 
             services
