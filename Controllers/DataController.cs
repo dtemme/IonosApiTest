@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Ionos.Model;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Ionos.Controllers
 {
@@ -9,17 +12,12 @@ namespace Ionos.Controllers
     [Route("api/[Controller]")]
     public class DataController : ControllerBase
     {
-        private readonly HttpMessageHandler httpMessageHandler;
+        private readonly HttpClient httpClient;
+        private readonly JsonSerializerOptions jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
-        public DataController()
+        public DataController(HttpClient httpClient)
         {
-            httpMessageHandler = new HttpClientHandler
-            {
-                AllowAutoRedirect = true,
-#if !DEBUG
-                Proxy = new System.Net.WebProxy("http://winproxy.schlund.de:3128"),
-#endif
-            };
+            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
         [HttpGet]
@@ -56,9 +54,8 @@ namespace Ionos.Controllers
         public async Task<IActionResult> GetFromExternalUrl()
         {
             var testUrl = "https://creativecommons.tankerkoenig.de/json/list.php?lat=52.521&lng=13.438&rad=1.5&sort=dist&type=all&apikey=00000000-0000-0000-0000-000000000002";
-            using var httpClient = new HttpClient(httpMessageHandler);
             var response = await httpClient.GetStringAsync(testUrl).ConfigureAwait(false);
-            return Ok(JsonConvert.DeserializeObject<dynamic>(response).stations[0]);
+            return Ok(JsonSerializer.Deserialize<TankerKoenigListResult>(response, jsonSerializerOptions).Stations.FirstOrDefault());
         }
     }
 }

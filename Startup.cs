@@ -10,10 +10,14 @@ namespace Ionos
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+#if !DEBUG
+            System.Net.Http.HttpClient.DefaultProxy = new System.Net.WebProxy("http://winproxy.schlund.de:3128");
+#endif
+
             services
                 .AddMvcCore()
-                .AddNewtonsoftJson()
                 .AddApiExplorer();
+            services.AddHttpClient();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
